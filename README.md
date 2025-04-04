@@ -16,15 +16,6 @@ This repository provides Terraform configurations for deploying an **Amazon Elas
 ## Repository Structure
 
 ```
-📂 modules/
- ├── 📄 vpc.tf  # VPC, subnets, internet gateway, NAT gateway
- ├── 📄 eks.tf  # EKS cluster configuration
- ├── 📄 node_group.tf  # Worker node configurations
- ├── 📄 iam.tf  # IAM roles and policies
- ├── 📄 security.tf  # Security group rules
-📂 environments/
- ├── 📂 dev/  # Development environment variables
- ├── 📂 prod/  # Production environment variables
 📄 main.tf  # Root module for Terraform execution
 📄 variables.tf  # Input variables for configuration
 📄 outputs.tf  # Outputs for Terraform resources
