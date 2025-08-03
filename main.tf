@@ -138,7 +138,9 @@ resource "aws_iam_role" "eks_cluster_role"{
   ]
 }
 EOF
+#principal specfies that only the ec2 and eks service can only use this role.
 }
+
 
 resource "aws_iam_role_policy_attachment" "eks_cluster_role_policy_attachment"{
   role = aws_iam_role.eks_cluster_role.name
@@ -163,18 +165,34 @@ resource "aws_iam_role" "eks_node_group_role" {
 }
 EOF
 }
+# AmazonEKSWorkerNodePolicy
+# Purpose:
+# Grants permissions for EC2 instances (worker nodes) to join the EKS cluster and communicate with the EKS control plane.
+# Key actions allowed:
+# Register/deregister nodes with the cluster
+# Describe cluster resources
 
 resource "aws_iam_role_policy_attachment" "eks_node_group_role_policy_attachment"{
   role = aws_iam_role.eks_node_group_role.name
   policy_arn  = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
 }
 
-#The below policy gives the full access of eks container network interface plugin. 
+# AmazonEKS_CNI_Policy
+# Purpose:
+# Allows the worker nodes to manage networking for Kubernetes pods using the Amazon VPC CNI plugin.
+# Key actions allowed:
+# Create, describe, and delete network interfaces (ENIs)
+# Assign and unassign IP addresses
 resource "aws_iam_role_policy_attachment" "eks_node_group_role_cni_policy_attachment"{
   role = aws_iam_role.eks_node_group_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
 }
 
+# AmazonEC2ContainerRegistryReadOnly
+# Purpose:
+# Allows the worker nodes to pull (download) container images from Amazon Elastic Container Registry (ECR).
+# Key actions allowed:
+# Read-only access to ECR repositories (pull images, but not push)
 resource "aws_iam_role_policy_attachment" "eks_node-group_role_register_policy_attachment"{
   role = aws_iam_role.eks_node_group_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
